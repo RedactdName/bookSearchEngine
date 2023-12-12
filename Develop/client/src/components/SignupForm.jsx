@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 // import { createUser } from '../utils/API';
@@ -14,15 +14,22 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
   const [addUser, { error, data }] = useMutation(ADD_USER);
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log(name);
+    console.log(value);
     setUserFormData({ ...userFormData, [name]: value });
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+  console.log(userFormData);
+// const Login = (props) => {
+//   const [formState, setFormState] = useState({ email: '', password: '' });
+//   const [login, { error, data }] = useMutation(LOGIN_USER);
+  
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -32,9 +39,9 @@ const SignupForm = () => {
 
     try {
       const { data } = await addUser({
-        variables: { ...formState },
+        variables: { ...userFormData },
       });
-
+      console.log(data)
       Auth.login(data.addUser.token);
     } catch (e) {
       console.error(e);
