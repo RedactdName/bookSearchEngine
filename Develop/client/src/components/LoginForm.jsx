@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
+import { LOGIN_USER } from '../utils/mutations';
+import { useMutation } from '@apollo/client';
+
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
@@ -26,7 +28,21 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      // line is using respt API call, replace so it uses the useMutation method, LOGIN_USER instead of userFormData
+      const Login = (props) => {
+  const [formState, setFormState] = useState({ email: '', password: '' });
+  const [LoginForm, { error, data }] = useMutation(LOGIN_USER);
+  
+
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
 
       if (!response.ok) {
         throw new Error('something went wrong!');
